@@ -71,10 +71,15 @@ static __inline__ unsigned long long stopRDTSCP(void) { return rdtsc(); }
 
 // for PPC we should be able to use tbl, but I could not find
 // an equivalent to rdtsc for ARM.
-
+#ifdef __ARM_NEON__
+inline unsigned long long rdtsc() { return 0; }
+static __inline__ unsigned long long startRDTSC(void) { return 0; }
+static __inline__ unsigned long long stopRDTSCP(void) { return 0; }
+#else
 inline uint64 rdtsc() { return 0; }
 static __inline__ ticks startRDTSC(void) { return 0; }
 static __inline__ ticks stopRDTSCP(void) { return 0; }
+#endif
 #else
 #error Unknown architecture
 #endif

@@ -2,7 +2,7 @@
  * This code is released under the
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  */
-#if !defined(__SSSE3__) && !(defined(_MSC_VER) && defined(__AVX__))
+#if !defined(__SSSE3__) && !(defined(_MSC_VER) && defined(__AVX__)) && !defined(__ARM_NEON__)
 #ifndef _MSC_VER
 #pragma message                                                                \
     "Disabling varintg8iu due to lack of SSSE3 support, try adding -mssse3 or the equivalent on your compiler"
@@ -12,7 +12,13 @@
 #else
 #ifndef VARINTG8IU_H__
 #define VARINTG8IU_H__
+
+#ifdef __ARM_NEON__
+#include <simde/x86/sse2.h>
+#else
 #include <emmintrin.h>
+#endif
+
 #include "codecs.h"
 #ifdef __GNUC__
 #define PREDICT_FALSE(x) (__builtin_expect(x, 0))

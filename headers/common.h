@@ -10,7 +10,11 @@
 // C headers (sorted)
 #include <errno.h>
 #include <fcntl.h>
+#ifdef __ARM_NEON__
+#include <simde/x86/avx.h>
+#else
 #include <immintrin.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

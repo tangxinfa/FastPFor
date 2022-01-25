@@ -132,6 +132,9 @@ __attribute__((const)) inline uint32_t gccbits(const uint64_t v) {
       return static_cast<uint32_t>(index + 32 + 1);
     }
   #endif
+#elif __ARM_NEON__
+    // For support aarch64
+    return 64 - __builtin_clzll(v);
 #else
   uint32_t answer;
   __asm__("bsr %1, %0;" : "=r"(answer) : "r"(v));
@@ -189,6 +192,9 @@ template <class iter> void printme(iter i, iter b) {
 __attribute__((const)) inline uint32_t asmbits(const uint32_t v) {
 #ifdef _MSC_VER
   return gccbits(v);
+#elif __ARM_NEON__
+  // For support arm64
+  return gccbits(v);
 #else
   if (v == 0)
     return 0;
@@ -200,6 +206,9 @@ __attribute__((const)) inline uint32_t asmbits(const uint32_t v) {
 
 __attribute__((const)) inline uint32_t asmbits(const uint64_t v) {
 #ifdef _MSC_VER
+  return gccbits(v);
+#elif __ARM_NEON__
+  // For support arm64
   return gccbits(v);
 #else
   if (v == 0) return 0;
